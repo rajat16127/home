@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Loan Default Prediction Using ML</title>
+  <style>
+      
+    img {
+            width: 100%; /* makes the image width 100% of the content area */
+            height: auto; /* maintains the aspect ratio of the image */
+        }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #222;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: black;
+    }
+
+    h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+    }
+
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    blockquote {
+      background: #f9f9f9;
+      border-left: 4px solid #ccc;
+      margin: 1em 0;
+      padding: 0.5em 10px;
+    }
+
+    a {
+      color: #5DADE2;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Home Loan Default Prediction Using Machine Learning</h1>
+    <p>This project focuses on predicting the likelihood of a customer defaulting on a home loan using historical demographic and financial data. The dataset contains over <strong>307,000 real-world loan applications</strong>, sourced from <a href="https://www.kaggle.com/datasets/urstrulyvikas/house-loan-data-analysis/">Kaggle</a>, and includes diverse features such as income, employment history, family status, education, and credit history.</p>
+
+    <h2>Understanding the Data</h2>
+    <ul>
+      <li>Dataset contains <strong>307,511 rows and 122 columns</strong>.</li>
+      <li>Target column: <code>TARGET</code> (0 = repaid loan, 1 = defaulted).</li>
+      <li><strong>Challenges:</strong>
+        <ul>
+          <li>Highly imbalanced data (~8% default).</li>
+          <li>Many missing values.</li>
+          <li>Several categorical variables.</li>
+        </ul>
+      </li>
+      <li>Initial findings:
+        <ul>
+          <li>Key features include income, credit amount, employment duration.</li>
+          <li>Some columns had over 40% missing values.</li>
+          <li>Multiple binary and multi-class string fields (e.g., gender, income type).</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Preprocessing the Data for Model Training</h2>
+    <ol>
+      <li><strong>Drop Identifiers:</strong> Removed <code>SK_ID_CURR</code>.</li>
+      <li><strong>Missing Values:</strong>
+        <ul>
+          <li>Dropped columns with >40% missing values.</li>
+          <li>Numerical: Imputed with median.</li>
+          <li>Categorical: Filled with mode.</li>
+        </ul>
+      </li>
+      <li><strong>Categorical Encoding:</strong>
+        <ul>
+          <li>Binary encoding for gender, car ownership, etc.</li>
+          <li>One-hot encoding for multi-class categorical columns like income type, education, organization type.</li>
+        </ul>
+      </li>
+      <li><strong>Feature Engineering:</strong>
+        <ul>
+          <li>Converted negative day values to positive.</li>
+          <li>Created ratios: income per person, credit/income, annuity/income.</li>
+        </ul>
+      </li>
+      <li><strong>Scaling:</strong> Used <code>StandardScaler</code> for numeric features.</li>
+      <li><strong>Final Dataset:</strong> 307510 rows, 172 columns (cleaned, numeric only).</li>
+    </ol>
+
+    <h2>📊 Insights from Exploratory Data Analysis (EDA)</h2>
+    <ul>
+      <li><strong>Class Imbalance:</strong> Default rate ~8% (Target=1).
+        <img src ='loan_ml_images/imbalance.png' >
+        </li>
+      <li><strong>Binary Feature Differences:</strong>
+        <ul>
+          <li><strong>Gender:</strong> Males default slightly more.
+            <img src ='loan_ml_images/gender.png' >
+            </li>
+            
+          <li><strong>Car ownership:</strong> Non-owners default more.
+            <img src ='loan_ml_images/car.png' >
+            </li>
+            
+            
+          <li><strong>Realty ownership:</strong> Non-owners default more.
+            <img src ='loan_ml_images/realty.png' >
+            </li>
+            
+        </ul>
+      </li>
+      <li><strong>Numerical Feature Trends:</strong> Credit, annuity, goods price, and children count showed different distributions for defaulters vs non-defaulters.
+        <ul>
+          <li><strong>Amount Credit</strong> 
+            <img src ='loan_ml_images/credit.png' >
+            </li>
+            
+          <li><strong>Annuity</strong> 
+            <img src ='loan_ml_images/annuity.png' >
+            </li>
+            
+            
+          <li><strong>Goods Price</strong> 
+            <img src ='loan_ml_images/goods_price.png' >
+            </li>
+            
+        </ul>
+        
+        </li>
+      <li><strong>Correlation Matrix:</strong> <code>EXT_SOURCE_2</code> and <code>EXT_SOURCE_3</code> are negatively  correlated with default risk.
+        <img src='loan_ml_images/correlation.png'>
+        </li>
+    </ul>
+
+    <h2>🤖 Model Selection</h2>
+    <p>We selected two models suitable for binary classification:</p>
+    <ol>
+      <li><strong>Logistic Regression:</strong>
+        <ul>
+          <li>Simple, interpretable baseline.</li>
+          <li>Good for numeric, large datasets.</li>
+        </ul>
+      </li>
+      <li><strong>Random Forest Classifier:</strong>
+        <ul>
+          <li>Ensemble of decision trees.</li>
+          <li>Captures non-linear patterns, handles imbalance better.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2>📈 Evaluation & Interpretation</h2>
+
+    <h3>Logistic Regression</h3>
+    <table>
+      <tr><th>Metric</th><th>Class 0 (No Default)</th><th>Class 1 (Default)</th></tr>
+      <tr><td>Precision</td><td>0.92</td><td>0.44</td></tr>
+      <tr><td>Recall</td><td>1.00</td><td>0.01</td></tr>
+      <tr><td>F1-score</td><td>0.96</td><td>0.02</td></tr>
+      <tr><td>Accuracy</td><td colspan="2">92%</td></tr>
+      <tr><td>ROC AUC</td><td colspan="2">0.7422</td></tr>
+    </table>
+    <p>Very high accuracy but poor recall on default class due to imbalance.</p>
+    <pre>
+Confusion Matrix:
+[84734   107]
+[7330     83]
+    </pre>
+
+    <h3>Random Forest Classifier</h3>
+    <table>
+      <tr><th>Metric</th><th>Class 0 (No Default)</th><th>Class 1 (Default)</th></tr>
+      <tr><td>Precision</td><td>0.96</td><td>0.17</td></tr>
+      <tr><td>Recall</td><td>0.72</td><td>0.62</td></tr>
+      <tr><td>F1-score</td><td>0.82</td><td>0.26</td></tr>
+      <tr><td>Accuracy</td><td colspan="2">72%</td></tr>
+      <tr><td>ROC AUC</td><td colspan="2">0.7356</td></tr>
+    </table>
+    <p>Random Forest offers more balanced performance across both classes, better at identifying defaulters.</p>
+    <pre>
+Confusion Matrix:
+[40951  15587]
+[1866    3099]
+    </pre>
+
+  </div>
+</body>
+</html>

@@ -4,7 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rajat M - Resume</title>
-  <link rel="stylesheet" href="sty.css">
+  <style type="text/css">
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: black;
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .header p {
+      margin: 5px 0;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    section {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: black;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    .job h3 {
+      font-size: 1.1em;
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      color: black;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    ul li {
+      margin-bottom: 5px;
+    }
+
+    .additional-information ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .additional-information ul li {
+      margin-bottom: 10px;
+    }
+
+    span {
+      font-weight: normal;
+      color: #777;
+    }
+
+    a {
+      text-decoration: none;
+      color: #5DADE2;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -13,7 +93,7 @@
       <p>✉️ rajat16127@gmail.com</p>
       <p>📞 8700048301</p>
       <p>
-        <img src=linkedin.svg width=15>
+        <img src="linkedin.svg" width="15">
         <a href="https://www.linkedin.com/in/rajat16127/">LinkedIn Profile</a>
       </p>
       <p><strong>GitHub:</strong> <a href="https://github.com/rajat16127">https://github.com/rajat16127</a></p>
@@ -24,57 +104,56 @@
       <h2>Summary</h2>
       <ul>
         <li>Engineering graduate with a specialization in Information Technology from Mumbai University.</li>
-        <li>Strong knowledge and hands-on experience in modern web development technologies including React, HTML, CSS, and JavaScript.</li>
-        <li>Good understanding of Artificial Intelligence and Machine Learning concepts, with a focus on Python-based tools.</li>
-        <li>Proficient in version control systems (Git, GitHub) and Linux environments.</li>
-        <li>Quick learner, problem-solver, and highly motivated to work in dynamic environments.</li>
-       </ul>
+        <li>Hands-on experience with Python-based Machine Learning workflows including data preprocessing, model building, and evaluation.</li>
+        <li>Strong understanding of ML concepts such as classification, regression, model validation, and feature selection.</li>
+        <li>Proficient with tools such as NumPy, Pandas, Scikit-learn, and Jupyter Notebook.</li>
+        <li>Skilled in Git, Linux, and developing data-driven solutions with practical applications.</li>
+      </ul>
     </section>
 
     <section class="skills">
       <h2>Skills</h2>
       <ul>
         <li><strong>Programming Languages:</strong> Python, JavaScript</li>
-        
-        <li><strong>Web Development:</strong> HTML, CSS, React</li>
-         <li><strong>Version Control:</strong> Git, GitHub</li>
-        <li><strong>Other Skills:</strong> Data Structures, Algorithms, API Development</li>
+        <li><strong>Data Analysis & ML:</strong> Pandas, NumPy, Scikit-learn, Matplotlib, Jupyter Notebook</li>
+        <li><strong>ML Concepts:</strong> Classification, Regression, Data Preprocessing, Model Evaluation</li>
+        <li><strong>Web Development:</strong> HTML, CSS</li>
+        <li><strong>Version Control:</strong> Git, GitHub</li>
+        <li><strong>Other:</strong> Data Structures, Algorithms, API Integration</li>
       </ul>
     </section>
 
-
     <section class="skills">
-      <h2>Project</h2>
+      <h2>Projects</h2>
+
+      <p><a href="loan_ml.html"><strong>Loan Default Prediction (ML Project) 📊</strong></a></p>
+      <p>Used a real-world dataset to predict loan default risks using Random Forest and Logistic Regression. Applied preprocessing techniques, feature scaling, and evaluated results using confusion matrix, precision, recall, and F1-score.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> Python, Pandas, NumPy, Scikit-learn, Jupyter</li>
+        <li><strong>ML Techniques:</strong> Classification, Train/Test Split, Evaluation Metrics</li>
+      </ul>
+
       <p><strong>Movie Search App 🎬</strong> <a href="https://rajat16127.github.io/IMDB_JS_P/">https://rajat16127.github.io/IMDB_JS_P/</a></p>
-    A responsive web application that allows users to search for movies and retrieve detailed information using an external Movie API. The app is built with JavaScript, and CSS, featuring a clean and intuitive UI. It dynamically fetches movie details like title, poster, release date, ratings, and plot summaries based on user queries. 
-<ul>
-<li><strong>Tech Stack:</strong> JavaScript, API Fetch, CSS</li>
-<li><strong>Features:</strong> Movie search, dynamic API calls, clean UI.</li>
-</ul>
+      <p>A responsive web application for browsing movies and retrieving information from an external API.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> JavaScript, API Fetch, CSS</li>
+        <li><strong>Features:</strong> Movie search, dynamic API calls, clean UI.</li>
+      </ul>
 
-<p><strong>Weather App ⛅🌡️</strong> <a href="https://rajat16127.github.io/WEATHER_APP/">https://rajat16127.github.io/WEATHER_APP/</a></p>
-A fully responsive web application that provides real-time weather information based on user-inputted city names. The app fetches data from the OpenWeatherMap API and displays detailed weather metrics including temperature, humidity, wind speed, and weather conditions. It handles both valid and invalid inputs gracefully and updates the UI dynamically without page reloads.
-<ul>
-  <li><strong>Tech Stack:</strong> JavaScript (ES6), HTML5, CSS3, OpenWeatherMap API, JSON</li>
-  <li><strong>Features:</strong> 
-    <ul>
-      <li>Live weather data fetched from external API</li>
-      <li>User input validation and error handling</li>
-      <li>Dynamic DOM manipulation using JavaScript</li>
-      <li>Displays temperature, weather icon, description, humidity, and wind speed</li>
-    </ul>
-  </li>
-</ul>
-
+      <p><strong>Weather App ⛅🌡️</strong> <a href="https://rajat16127.github.io/WEATHER_APP/">https://rajat16127.github.io/WEATHER_APP/</a></p>
+      <p>Responsive app that fetches real-time weather data based on user input.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> JavaScript, HTML5, CSS3, OpenWeatherMap API</li>
+        <li><strong>Features:</strong> Live updates, user input validation, API integration.</li>
+      </ul>
     </section>
 
-    
     <section class="education">
       <h2>Education</h2>
       <div>
         <h3>Bachelor of Engineering (Information Technology)</h3>
         <h4>University of Mumbai</h4>
-        <p>Relevant coursework: Data Structures, Algorithms, Machine Learning, Artificial Intelligence, Data Mining, Cloud Computing, Distributed Systems.</p>
+        <p>Relevant coursework: Machine Learning, Data Structures, Algorithms, Data Mining, Artificial Intelligence, Cloud Computing.</p>
       </div>
     </section>
 
@@ -82,7 +161,6 @@ A fully responsive web application that provides real-time weather information b
       <h2>Additional Information</h2>
       <ul>
         <li><strong>Languages:</strong> Fluent in English, Hindi, and Marathi</li>
-        
       </ul>
     </section>
   </div>
