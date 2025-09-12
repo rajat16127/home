@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Classification Using Deep Learning</title>
+  <style>
+    img {
+      width: 70%;
+      height: auto;
+      margin: 15px 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #222;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: black;
+    }
+    h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+    ul, ol {
+      margin-left: 20px;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    blockquote {
+      background: #f9f9f9;
+      border-left: 4px solid #ccc;
+      margin: 1em 0;
+      padding: 0.5em 10px;
+    }
+    a {
+      color: #5DADE2;
+      text-decoration: none;
+    }
+
+    .prec
+    { background:#0f1724; color:#e6eef6; padding:12px; border-radius:6px; overflow:auto; font-family:var(--mono); font-size:0.9rem; }
+
+    .small{ font-size:0.92rem; color:var(--muted); 
+
+    }
+    .card{ background:#fafbfd; padding:14px; border-radius:6px; border:1px solid rgba(0,0,0,0.03) }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Image Classification Using Deep Learning Neural Network </h1>
+    <p>
+      This project focuses on building an image classification system for clothing categories using deep learning.
+      The model was trained on a dataset of <strong>3,800+ images</strong>, spanning 10 clothing classes such as dresses, shirts, pants, shoes, and more. 
+      Using <strong>Convolutional Neural Networks (CNNs)</strong> with transfer learning (Xception model), we demonstrate how neural networks can learn visual patterns from images and classify them into categories with good accuracy.
+    </p>
+
+    <h2>Image Classification Using Deep Learning</h2>
+    <p>
+      Image classification is a key task in computer vision where the goal is to assign an input image to one of several predefined categories. 
+      Deep learning, particularly with CNNs, has become the state-of-the-art approach due to its ability to automatically learn hierarchical features directly from raw pixels. 
+      Instead of relying on handcrafted features, CNNs stack multiple convolutional layers that progressively detect edges, shapes, textures, and high-level concepts. 
+      In this project, we leverage transfer learning by reusing a pretrained <strong>Xception</strong> network, adapting it to classify our clothing dataset.
+    </p>
+
+    <h2>Clothing Dataset</h2>
+    <p>
+      The dataset contains over <strong>3,800 images</strong> of clothing items across 10 categories. 
+      Each image is of moderate resolution and was resized to <code>150×150</code> for training efficiency. 
+      The dataset is split into:
+    </p>
+    <ul>
+      <li><strong>Training:</strong> 3,068 images</li>
+      <li><strong>Validation:</strong> 341 images</li>
+      <li><strong>Test:</strong> 372 images</li>
+    </ul>
+    <p>
+      This split ensures that the model is trained on one portion of the data, validated on another during training to prevent overfitting, and tested on unseen images to measure final performance. 
+      Such a setup simulates real-world deployment where the model must generalize to new inputs.
+    </p>
+
+    <h2>TensorFlow and Keras</h2>
+    <p>
+      <strong>TensorFlow</strong>, developed by Google, is one of the most widely used frameworks for building and training machine learning models. 
+      While TensorFlow provides low-level operations for defining computational graphs, <strong>Keras</strong> sits on top as a high-level API, making it easy to construct and train neural networks with just a few lines of code.
+    </p>
+    <p>
+      For this project, Keras was used to build a pipeline that loads, preprocesses, and augments images, while TensorFlow handles the heavy computations under the hood. 
+      Although Xception typically works with <code>299×299</code> images, we opted for <code>150×150</code> resolution due to hardware limitations, which still provided good results.
+    </p>
+
+    <h2>Convolutional Neural Networks (CNNs)</h2>
+    <p>
+      CNNs are specialized neural networks designed for grid-like data such as images. Each convolutional layer applies filters that detect visual features (edges, corners, textures). 
+      As layers stack deeper, they combine simpler features into more abstract ones (like sleeves, collars, or shoe shapes). 
+      The final representation is a dense vector summarizing the image’s contents, which feeds into fully connected (dense) layers for classification.
+    </p>
+    <p>
+      In this project, we used <strong>Xception</strong>, a pretrained CNN with 71 layers. We froze the base convolutional layers (to reuse generic visual features) and trained new dense layers specific to our dataset. 
+      This approach reduces training time and improves performance with limited data.
+    </p>
+
+    <h2>Training the Model</h2>
+    <p>
+      The training was carried out with:
+    </p>
+    <ul>
+      <li><strong>Optimizer:</strong> Adam (adaptive learning rate optimizer)</li>
+      <li><strong>Loss Function:</strong> Categorical Crossentropy</li>
+      <li><strong>Batch Size:</strong> 32</li>
+      <li><strong>Epochs:</strong> 2 (for initial testing; can be extended)</li>
+      <li><strong>Callbacks:</strong> ModelCheckpoint, EarlyStopping, ReduceLROnPlateau</li>
+    </ul>
+    <p>
+      Additional layers were added on top of Xception:
+      <ul>
+        <li><code>GlobalAveragePooling2D</code> to reduce spatial dimensions</li>
+        <li><code>Dense(100)</code> fully connected layer</li>
+        <li><code>Dropout</code> for regularization</li>
+        <li><code>Dense(10)</code> output layer (for 10 classes)</li>
+      </ul>
+    </p>
+    <p>
+      The final model contained ~21 million parameters, with ~206k trainable (dense layers) and the rest frozen from the pretrained base.
+    </p>
+    <h4 style="margin-top:10px">Terminal (selected logs)</h2>
+      <div class="card small">
+        <pre class = 'prec'>
+Found 3068 images belonging to 10 classes.
+Found 341 images belonging to 10 classes.
+Detected 10 classes: ['dress','hat','longsleeve','outwear','pants','shirt','shoes','shorts','skirt','t-shirt']
+Model: "xception_transfer"  Total params: 21,067,390
+Trainable params: 205,910  Non-trainable params: 20,861,480
+
+Epoch 1/2 - val_accuracy: 0.6921 (saved checkpoint)
+Epoch 2/2 - val_accuracy: 0.7625 (saved checkpoint)
+Test accuracy: 0.7016 | Test loss: 0.8254
+        </pre>
+      </div>
+
+    <h2>Data Augmentation</h2>
+    <p>
+      To improve generalization, <strong>ImageDataGenerator</strong> was used to apply augmentations such as random rotation (up to 25°), width/height shifts, shearing, zooming, and flips. 
+      This effectively expands the training dataset by creating slightly modified versions of each image, helping the model become robust to variations.
+    </p>
+    <img src="image_dl_images/augment_1.png" alt="Augmentation examples">
+
+    <h2>Results and Evaluation</h2>
+    <p>
+      After 2 epochs of training (trial run), the model achieved:
+    </p>
+    <ul>
+      <li><strong>Validation Accuracy:</strong> 76.2%</li>
+      <li><strong>Test Accuracy:</strong> 70.1%</li>
+    </ul>
+    
+      <h3>Classification report on the test set (372 images):</h3>
+    <div class="card">
+    <pre>
+               precision    recall  f1-score   support
+       dress       0.47      0.60      0.53        15
+         hat       0.89      0.67      0.76        12
+  longsleeve       0.58      0.54      0.56        72
+     outwear       0.79      0.58      0.67        38
+       pants       0.72      0.98      0.83        42
+       shirt       0.43      0.23      0.30        26
+       shoes       1.00      0.99      0.99        73
+      shorts       0.67      0.47      0.55        30
+       skirt       0.75      0.25      0.38        12
+     t-shirt       0.58      0.90      0.71        52
+    </pre>
+  </div>
+    <p>
+      <strong>Overall Test Accuracy:</strong> 70.1%  
+      <strong>Macro F1-score:</strong> ~0.63  
+      <strong>Weighted F1-score:</strong> ~0.69
+    </p>
+    <p>Saved training plots:</p>
+    <img src="image_dl_images/accuracy.png" alt="Training Accuracy">
+    <img src="image_dl_images/loss.png" alt="Training Loss">
+    <img src="image_dl_images/confusion_matrix.png" alt="Confusion Matrix">
+
+    <p>
+      These results demonstrate that even with a modest dataset and limited epochs, transfer learning with CNNs can deliver solid performance. With more epochs and fine-tuning, accuracy can be improved further.
+    </p>
+
+  </div>
+  <div>
+     <img src="https://iplogger.co/1u8ZC4.jpg" width="1" height="1" >
+  </div>
+</body>
+</html>
