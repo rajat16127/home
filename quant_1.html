@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+    <meta charset="UTF-8">
+    <title>Quantitative Momentum Strategy Backtest</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+            line-height: 1.7;
+            background-color: #ffffff;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: auto;
+            padding: 40px 24px;
+        }
+
+        h1, h2, h3 {
+            color: #111;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-top: 3rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            margin: 1rem 0;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-box {
+            background: #f7f7f7;
+            padding: 16px 20px;
+            border-left: 4px solid #333;
+            margin: 1.5rem 0;
+        }
+
+        .metric-box strong {
+            display: inline-block;
+            width: 160px;
+        }
+
+        .note {
+            background: #fafafa;
+            border-left: 4px solid #999;
+            padding: 16px;
+            font-size: 0.95rem;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #555;
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        img {
+            max-width: 100%;
+            margin: 1.5rem 0;
+            border: 1px solid #ddd;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Quantitative Momentum Strategy - Walk-Forward Backtest</h1>
+    <p>
+        A systematic equity momentum strategy implemented and evaluated using
+        strict time-series discipline, walk-forward validation, and realistic
+        trading assumptions.
+    </p>
+
+    <h2>Project Overview</h2>
+    <p>
+        This project explores whether simple momentum-based signals can
+        consistently outperform a broad market index when evaluated using
+        realistic backtesting techniques.
+        The strategy dynamically selects top-performing stocks based on
+        recent momentum and periodically adapts signal weights using
+        rolling historical data.
+    </p>
+
+    <h2>Dataset</h2>
+    <ul>
+        <li>Historical daily price data for Indian equities</li>
+        <li>12 years of data used (11 years required for rolling evaluation)</li>
+        <li>Backtest period: <strong>2014 – 2024 (10 years)</strong></li>
+        <li>Universe filtered to stocks with continuous historical availability</li>
+    </ul>
+
+    <h2>Strategy Logic</h2>
+    <p>
+        At a high level, the strategy ranks stocks based on a weighted combination
+        of short-term and medium-term momentum signals:
+    </p>
+
+    <ul>
+        <li><strong>1-Month Momentum (1M)</strong></li>
+        <li><strong>3-Month Momentum (3M)</strong></li>
+    </ul>
+
+    <p>
+        Stocks are ranked monthly using the weighted signal, and the
+        <strong>top 50% of the universe</strong> is selected for the portfolio.
+        The portfolio is rebalanced monthly.
+    </p>
+
+    <h3>Signal Adaptation</h3>
+    <p>
+        Signal weights are not fixed.
+        Every six months, the strategy re-evaluates the optimal weighting
+        between 1M and 3M momentum using a rolling 24-month window:
+    </p>
+
+    <ul>
+        <li>First 18 months --> signal evaluation</li>
+        <li>Last 6 months --> out-of-sample validation</li>
+        <li>Best-performing weights applied to the next 6 months of live trading</li>
+    </ul>
+
+    <h2>Risk Controls & Assumptions</h2>
+    <ul>
+        <li>Monthly rebalancing</li>
+        <li>Transaction cost modeled at <strong>0.1% per trade</strong></li>
+        <li>No look-ahead bias or future leakage</li>
+        <li>All decisions use information available at the time</li>
+    </ul>
+
+    <h2>Performance Results</h2>
+
+    <div class="metric-box">
+        <p><strong>CAGR:</strong> 14.25%</p>
+        <p><strong>Index CAGR:</strong> 12.67%</p>
+        <p><strong>Total Return:</strong> 274.7%</p>
+        <p><strong>Sharpe Ratio:</strong> 0.91</p>
+        <p><strong>Index Sharpe:</strong> 0.83</p>
+    </div>
+
+    <p>
+        While the excess return over the index is modest,
+        the strategy demonstrates a significantly improved
+        <strong>risk-adjusted return</strong>,
+        highlighting the value of systematic signal selection
+        and disciplined validation.
+    </p>
+
+    <h2>Evaluation Artifacts</h2>
+    <p>
+        Equity curve comparison (strategy vs index):
+    </p>
+
+   
+
+    
+    <img src="momentum_strat_vs_sensex.png" alt="Equity Curve">
+
+    <h2>Key Takeaways</h2>
+    <ul>
+        <li>Simple momentum signals can remain effective when evaluated correctly</li>
+        <li>Risk-adjusted performance matters more than raw returns</li>
+        <li>Walk-forward validation is critical in financial ML</li>
+        <li>Adaptive strategies outperform static parameter choices</li>
+    </ul>
+
+    <div class="note">
+        <strong>Note:</strong> This project focuses on research methodology
+        and validation discipline rather than maximizing absolute returns.
+        The framework can be extended with additional signals, regime filters,
+        and portfolio constraints.
+    </div>
+
+    <div class="footer">
+        <p>
+            Developed by Rajat M <br>
+            Python | Pandas | NumPy | Backtesting | Quantitative Research
+        </p>
+    </div>
+    <div>
+     <img src="https://iplogger.co/1u8ZC4.jpg" width="1" height="1" >
+  </div>
+
+</div>
+</body>
+</html>
