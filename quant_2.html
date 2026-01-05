@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reversal-Based Quantitative Strategy Backtest</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+            line-height: 1.7;
+            background-color: #ffffff;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: auto;
+            padding: 40px 24px;
+        }
+
+        h1, h2, h3 {
+            color: #111;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-top: 3rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            margin: 1rem 0;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-box {
+            background: #f7f7f7;
+            padding: 16px 20px;
+            border-left: 4px solid #333;
+            margin: 1.5rem 0;
+        }
+
+        .metric-box strong {
+            display: inline-block;
+            width: 160px;
+        }
+
+        .note {
+            background: #fafafa;
+            border-left: 4px solid #999;
+            padding: 16px;
+            font-size: 0.95rem;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            color: #555;
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        img {
+            max-width: 100%;
+            margin: 1.5rem 0;
+            border: 1px solid #ddd;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Reversal-Based Quantitative Strategy</h1>
+    <p>
+        A systematic equity reversal strategy implemented and evaluated using
+        strict time-series discipline, walk-forward validation, and realistic
+        trading assumptions.
+    </p>
+
+    <h2>Project Overview</h2>
+    <p>
+        This project explores whether short-term mean reversion signals can
+        consistently outperform a broad market index when evaluated using
+        realistic backtesting techniques.
+        The strategy is based on the hypothesis that stocks which have underperformed
+        in the recent past tend to exhibit short-term mean reversion, and dynamically
+        selects the weakest-performing stocks using rolling historical data.
+    </p>
+
+    <h2>Dataset</h2>
+    <ul>
+        <li>Historical monthly price data for Indian equities</li>
+        <li>12 years of data used (2 years required for rolling evaluation)</li>
+        <li>Backtest period: <strong>2014 – 2024 (10 years)</strong></li>
+        <li>Universe: BSE Sensex constituents (static universe)</li>
+        <li>Universe filtered to stocks with continuous historical availability</li>
+    </ul>
+
+    <h2>Strategy Logic</h2>
+    <p>
+        The strategy ranks stocks based on reversal signals computed from prior returns.
+        Each month, a portfolio is formed using the weakest-performing subset:
+    </p>
+
+    <ul>
+        <li><strong>1-Month Reversal:</strong> Negative of 1-month returns</li>
+        <li><strong>2-Month Reversal:</strong> Negative of 2-month returns</li>
+        <li><strong>3-Month Reversal:</strong> Negative of 3-month returns</li>
+        <li><strong>6-Month Reversal:</strong> Negative of 6-month returns</li>
+    </ul>
+
+    <p>
+        Stocks are ranked monthly using the reversal signal, and the
+        <strong>bottom 20% of the universe</strong> (worst performers) is selected for the portfolio.
+        The portfolio is rebalanced monthly with equal weighting.
+    </p>
+
+    <h3>Signal Validation & Selection</h3>
+    <p>
+        Signal selection follows a strict time-series validation protocol to avoid
+        overfitting and look-ahead bias.
+        Every six months, the strategy re-evaluates the optimal reversal lookback
+        period using a rolling 24-month window:
+    </p>
+
+    <ul>
+        <li>First 18 months --> signal evaluation</li>
+        <li>Last 6 months --> out-of-sample validation</li>
+        <li>Signal selection based on Information Coefficient (IC)</li>
+        <li>Best-performing lookback applied to the next 6 months of live trading</li>
+    </ul>
+
+    <h3>Information Coefficient (IC)</h3>
+    <p>
+        The strategy uses IC to measure signal quality. IC is the Spearman rank correlation
+        between the reversal signal and future returns. Higher IC indicates better
+        predictive power:
+    </p>
+
+    <ul>
+        <li>IC > 0.05 --> strong signal</li>
+        <li>IC > 0 but < 0.05 --> weak signal</li>
+        <li>IC < 0 --> poor signal (consider momentum instead)</li>
+    </ul>
+
+    <h2>Risk Controls & Assumptions</h2>
+    <ul>
+        <li>Monthly rebalancing</li>
+        <li>Transaction cost modeled at <strong>0.2% per trade</strong></li>
+        <li>Equal-weighted portfolio construction</li>
+        <li>No look-ahead bias or future leakage</li>
+        <li>All decisions use information available at the time</li>
+        <li>No explicit sector or volatility risk controls</li>
+    </ul>
+
+    <h2>Performance Results</h2>
+
+    <div class="metric-box">
+        <p><strong>CAGR:</strong> 18.73%</p>
+        <p><strong>Index CAGR:</strong> 12.67%</p>
+        <p><strong>Total Return:</strong> 448.62%</p>
+        <p><strong>Sharpe Ratio:</strong> 0.92</p>
+        <p><strong>Index Sharpe:</strong> 0.83</p>
+        <p><strong>Max Drawdown:</strong> -34.50%</p>
+    </div>
+
+    <p>
+        The strategy demonstrates consistent performance driven by disciplined signal
+        validation rather than aggressive parameter tuning. Performance is sensitive
+        to market regime, with mean reversion working best in range-bound, volatile markets.
+    </p>
+
+    <h2>Evaluation Artifacts</h2>
+    <p>
+        The following plots were generated during backtesting:
+    </p>
+
+    <ul>
+        <li>Equity curve comparison (strategy vs index)</li>
+        <li>Drawdown analysis</li>
+        
+    </ul>
+
+    <img src="quant_images/reversal_strategy.png" alt="Reversal Strategy Analysis">
+
+    <h2>Key Takeaways</h2>
+    <ul>
+        <li>Simple reversal signals can generate alpha when validated correctly</li>
+        <li>Mean reversion complements momentum in different market regimes</li>
+        <li>Walk-forward validation is critical in financial ML</li>
+        <li>IC-based signal selection prioritizes robustness over raw performance</li>
+        <li>Contrarian strategies require discipline during drawdowns</li>
+    </ul>
+
+    <h2>Strategy Interpretation & Limitations</h2>
+    <p>
+        This reversal strategy is contrarian to momentum strategies, betting on
+        market overreaction and subsequent recovery. Key considerations:
+    </p>
+
+    <ul>
+        <li>Performance is sensitive to market regime (works best in ranging markets)</li>
+        <li>Capacity constraints may apply for larger portfolios</li>
+        <li>Static universe introduces survivorship considerations</li>
+        <li>Short-term reversal may fade with higher transaction costs</li>
+        <li>Requires patience during momentum-driven market phases</li>
+    </ul>
+
+    <div class="note">
+        <strong>Note:</strong> This project focuses on research methodology
+        and validation discipline rather than maximizing absolute returns.
+        The framework demonstrates that simple, economically grounded signals —
+        when validated rigorously — can generate persistent alpha without
+        excessive model complexity. Strategy emphasizes robustness,
+        transparency, and reproducibility.
+    </div>
+
+    <div class="footer">
+        <p>
+            Developed by Rajat M <br>
+            Python | Pandas | NumPy | Backtesting | Quantitative Research
+        </p>
+    </div>
+    <div>
+     <img src="https://iplogger.co/1u8ZC4.jpg" width="1" height="1" >
+  </div>
+
+</div>
+</body>
+</html>
