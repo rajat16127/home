@@ -191,37 +191,135 @@
     <h2>📈 Evaluation & Interpretation</h2>
 
     <h3>Logistic Regression</h3>
-    <table>
-      <tr><th>Metric</th><th>Class 0 (No Default)</th><th>Class 1 (Default)</th></tr>
-      <tr><td>Precision</td><td>0.92</td><td>0.44</td></tr>
-      <tr><td>Recall</td><td>1.00</td><td>0.01</td></tr>
-      <tr><td>F1-score</td><td>0.96</td><td>0.02</td></tr>
-      <tr><td>Accuracy</td><td colspan="2">92%</td></tr>
-      <tr><td>ROC AUC</td><td colspan="2">0.7422</td></tr>
-    </table>
+    
     <p>Very high accuracy but poor recall on default class due to imbalance.</p>
+      
+      <table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1-score</th>
+      <th>support</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.92</td>
+      <td>1.00</td>
+      <td>0.96</td>
+      <td>84841</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0.44</td>
+      <td>0.01</td>
+      <td>0.02</td>
+      <td>7413</td>
+    </tr>
+    <tr>
+      <td>accuracy</td>
+      
+      <td colspan='3'>0.92</td>
+      <td>92254</td>
+    </tr>
+    <tr>
+      <td>macro avg</td>
+      <td>0.68</td>
+      <td>0.50</td>
+      <td>0.49</td>
+      <td>92254</td>
+    </tr>
+    <tr>
+      <td>weighted avg</td>
+      <td>0.88</td>
+      <td>0.92</td>
+      <td>0.88</td>
+      <td>92254</td>
+    </tr>
+    <tr>
+        <td>ROC AUC</td><td colspan="4">0.7422</td>
+      
+    </tr>
+  </tbody>
+</table>
     <pre>
 Confusion Matrix:
 [84734   107]
 [7330     83]
     </pre>
+    <pre>
+    <p>The snapshot of Terminal output</p>
+    <img src="loan_ml_images/lr.png">
+    </pre>
 
     <h3>Random Forest Classifier</h3>
-    <table>
-      <tr><th>Metric</th><th>Class 0 (No Default)</th><th>Class 1 (Default)</th></tr>
-      <tr><td>Precision</td><td>0.96</td><td>0.17</td></tr>
-      <tr><td>Recall</td><td>0.72</td><td>0.62</td></tr>
-      <tr><td>F1-score</td><td>0.82</td><td>0.26</td></tr>
-      <tr><td>Accuracy</td><td colspan="2">72%</td></tr>
-      <tr><td>ROC AUC</td><td colspan="2">0.7356</td></tr>
-    </table>
+    
+      
     <p>Random Forest offers more balanced performance across both classes, better at identifying defaulters.</p>
-    <pre>
+      
+          <table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1-score</th>
+      <th>support</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.96</td>
+      <td>0.72</td>
+      <td>0.82</td>
+      <td>56538</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>0.17</td>
+      <td>0.62</td>
+      <td>0.26</td>
+      <td>4965</td>
+    </tr>
+    <tr>
+      <td>accuracy</td>
+      
+      <td colspan='3'>0.72</td>
+      <td>61503</td>
+    </tr>
+    <tr>
+      <td>macro avg</td>
+      <td>0.56</td>
+      <td>0.67</td>
+      <td>0.54</td>
+      <td>61503</td>
+    </tr>
+    <tr>
+      <td>weighted avg</td>
+      <td>0.89</td>
+      <td>0.72</td>
+      <td>0.78</td>
+      <td>61503</td>
+    </tr>
+    <tr>
+        <td>ROC AUC</td><td colspan="4">0.73564</td>
+      
+    </tr>
+  </tbody>
+</table>
+      <pre>
 Confusion Matrix:
 [40951  15587]
 [1866    3099]
     </pre>
-
+    <pre>
+    <p>The snapshot of Terminal output</p>
+    <img src="loan_ml_images/rf.png">
+    </pre>
 
   </div>
   <div>
