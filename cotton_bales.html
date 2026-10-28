@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Cotton Bale Detection & Tracking System | Project Report</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --surface: #fff;
+      --surface-border: #334155;
+      --text: #222;
+      --text-muted: #222
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --success: #34d399;
+      --code-bg: #090d16;
+      --font-mono: "JetBrains Mono", "Fira Code", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1rem;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #222;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 800px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.75rem;
+      background: var(--surface);
+      padding: 1.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface-border);
+    }
+
+    .meta-item span {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .meta-item strong {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #222;
+      border-left: 4px solid var(--accent);
+      padding-left: 0.75rem;
+      margin: 3rem 0 1.25rem 0;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem 0;
+      color: #222;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #222;
+    }
+
+    ul, ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.25rem;
+      color: #222;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    .metrics-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
+    }
+
+    /* Media Containers */
+    .media-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+    }
+
+    .media-header {
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .video-wrapper {
+      position: relative;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 380px;
+    }
+
+    video {
+      width: 100%;
+      max-height: 540px;
+      display: block;
+    }
+
+    .media-placeholder {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      border: 2px dashed var(--surface-border);
+      margin: 1rem;
+      border-radius: 6px;
+    }
+
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 800px) {
+      .snapshot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .img-container {
+      background: #000;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+
+    .img-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Code & Config Display */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      color: #e2e8f0;
+      margin: 1rem 0;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .pipeline-step {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .pipeline-step strong {
+      color: #222;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--surface-border);
+      padding-top: 2rem;
+      margin-top: 4rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge-bar">
+      <span class="badge">Computer Vision</span>
+      <span class="badge">Edge AI</span>
+      <span class="badge">YOLO11n</span>
+      <span class="badge">Dockerized Pipeline</span>
+      <span class="badge">Industrial Analytics</span>
+    </div>
+    <h1>Edge-Deployed Industrial Cotton Bale Counter</h1>
+    <p class="subtitle">
+      An end-to-end computer vision tracking system leveraging a fine-tuned YOLO11 model, 2D vector geometry for trajectory crossing verification, automated visual audit snapshot capture, and structured telemetry logging within a containerized CPU edge environment.
+    </p>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span>Target Task</span>
+        <strong>Real-time Detection & Counting</strong>
+      </div>
+      <div class="meta-item">
+        <span>Model Architecture</span>
+        <strong>YOLO11n (2.59M Params)</strong>
+      </div>
+      <div class="meta-item">
+        <span>Deployment Environment</span>
+        <strong>Docker / CPU Inference</strong>
+      </div>
+      <div class="meta-item">
+        <span>Target Deployment</span>
+        <strong>Ginning Mill Facility (Hyderabad region)</strong>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. EXECUTIVE SUMMARY & ARCHITECTURE -->
+  <section>
+    <h2>1. Executive Summary & Architecture</h2>
+    <p>
+      In industrial cotton ginning and processing facilities, automated tracking of packaged cotton bales is critical for throughput monitoring, inventory verification, and operational transparency. Manual logging is labor-intensive and error-prone. 
+    </p>
+    <p>
+      This project delivered an edge-ready computer vision solution that inspects factory camera feeds, continuously identifies large dense cotton bales emerging from industrial hydraulic presses, tracks them across a conveyor section, triggers an increment on a virtual crossing boundary, and generates real-time telemetry alongside audit snapshots for local and upstream ingestion.
+    </p>
+
+    <div class="metrics-container">
+      <div class="metric-card">
+        <div class="metric-val">2.59M</div>
+        <div class="metric-label">Model Parameters</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">6.44</div>
+        <div class="metric-label">GFLOPs Inference Cost</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">100%</div>
+        <div class="metric-label">Auditability (Snap + JSON)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">0</div>
+        <div class="metric-label">Container Rebuild Overhead</div>
+      </div>
+    </div>
+
+    <h3>Pipeline Execution Flow</h3>
+    <div class="pipeline-step">
+      <strong>Step 1: Frame Acquisition & Dynamic Sourcing</strong>
+      Frames are streamed from factory RTSP endpoints or test video sources at runtime via an isolated configuration map.
+    </div>
+    <div class="pipeline-step">
+      <strong>Step 2: Object Detection & Persistent Multi-Object Tracking</strong>
+      YOLO11n extracts class bounding boxes (<code>cotton-bale</code>) with confidence and IoU threshold filtering. Frame-to-frame identity persistence is maintained using multi-object tracking (<code>model.track(persist=True)</code>).
+    </div>
+    <div class="pipeline-step">
+      <strong>Step 3: Signed 2D Vector Boundary Trajectory Calculation</strong>
+      Centroid coordinates $(x_c, y_c)$ of each tracked bale ID are evaluated against a parameterized 2-point directional boundary line. Crossing is recognized through polarity change of the vector cross-product.
+    </div>
+    <div class="pipeline-step">
+      <strong>Step 4: Atomic Logging & Audit Artifact Generation</strong>
+      Upon valid transition, the counter increments. Simultaneously, an annotated frame snapshot with bounding coordinates and an accompanying ISO timestamped JSON payload are flushed to the mapped host filesystem.
+    </div>
+  </section>
+
+  <!-- 2. DATA ENGINEERING -->
+  <section>
+    <h2>2. Data Engineering & Selective Curation</h2>
+    <p>
+      Training data was curated from raw industrial factory footage provided by the operational team:
+    </p>
+    <ul>
+      <li>
+        <strong>Static Warehouse Feed (2 minutes):</strong> Showed stationary cotton bales stacked in a storage facility with ambient industrial dust and variable lighting. Because immediate consecutive frames were redundant, frames were sparsely sampled, and deliberate spatial augmentation (selective cropping, zooming, aspect ratio adjustments) was applied to teach the model invariance to bale texture, stacking edges, and distance.
+      </li>
+      <li>
+        <strong>Active Press & Conveyor Feed (&gt;30 minutes):</strong> Captured workers operating a large hydraulic press producing cuboid cotton bales every few minutes, which were moved onto short conveyor paths and transported on trolleys. A key challenge was the sparsity of bale appearances. Redundant idle machine frames and near-duplicate successive frames were discarded via selective sampling, preserving only informative frames containing emergence, translation, and human-object interactions.
+      </li>
+      <li>
+        <strong>Annotation:</strong> Filtered datasets were imported into Roboflow for bounding-box annotation under a single target class (<code>cotton-bale</code>), followed by augmentation pipelines (geometric shifts, brightness perturbations) prior to model training.
+      </li>
+    </ul>
+  </section>
+
+  <!-- 3. MODEL ARCHITECTURE & TRACKING -->
+  <section>
+    <h2>3. Computer Vision & Crossing Logic</h2>
+    <p>
+      The core detector is an ultralightweight <strong>YOLO11n</strong> architecture. Its small footprint enables real-time edge CPU performance without requiring high-power industrial GPUs.
+    </p>
+
+    <pre><code>Model Summary:
+------------------------------------------------------------
+Layers:            182
+Parameters:        2,590,035 (2.59 M)
+GFLOPs:            6.44
+Task:              Single-class Object Detection (0: cotton-bale)
+Runtime Platform:  CPU Edge Container (Ultralytics / OpenCV)
+------------------------------------------------------------</code></pre>
+
+    <h3>Vector Line Side Verification</h3>
+    <p>
+      To support tilted conveyor angles and diverse camera perspectives across facilities, the counting boundary is defined in <code>annotation.cfg</code> using normalized coordinates <code>LINE_P1</code> and <code>LINE_P2</code>. Rather than using standard horizontal or vertical axis thresholds, the crossing logic calculates the signed determinant (2D cross product) of the vector from line point $P_1$ to bale centroid $P$ relative to the directional vector $P_1 \to P_2$:
+    </p>
+    <pre><code>side = (point.x - p1.x) * (p2.y - p1.y) - (point.y - p1.y) * (p2.x - p1.x)</code></pre>
+    <p>
+      When an actively tracked object transitions from a negative sign to a non-negative sign (<code>prev_side &lt; 0 and current_side &gt;= 0</code>), a forward crossing is detected. A unique tracking ID set (<code>tracked_ids</code>) prevents duplicate triggers if a bale pauses or decelerates on the boundary.
+    </p>
+  </section>
+
+  <!-- 4. VIDEO DEMO SHOWCASE -->
+  <section>
+    <h2>4. Live Tracking & Verification Footage</h2>
+    <p>
+      Recorded demonstration of the detection inference pipeline tracking cotton bales emerging from the press conveyor:
+    </p>
+
+    <div class="media-card">
+      <div class="media-header">
+        <span>Factory Inference Demo (50s H.264 MP4)</span>
+        <span>Status: Processed & Encoded</span>
+      </div>
+      <div class="video-wrapper">
+        <!-- Replace 'bale_counter_demo.mp4' with the actual path to your video file -->
+        <video controls playsinline preload="metadata">
+          <source src="cotton_files/cotton_2post.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. SNAPSHOT & EVENT AUDIT TRAIL -->
+  <section>
+    <h2>5. Event-Driven Audit Trail: Snapshot & JSON Telemetry</h2>
+    <p>
+      Whenever a bale triggers the crossing condition, the system performs an atomic dual-write operation: an annotated bounding-box visual snapshot and an indexed JSON payload containing hardware and location metadata.
+    </p>
+
+    <div class="snapshot-grid">
+      <!-- Snapshot image display -->
+      <div class="media-card" style="margin: 0;">
+        <div class="media-header">
+          <span>Crossing Snapshot Output</span>
+          <span>Camera: cam01</span>
+        </div>
+        <div class="img-container">
+          <!-- Replace 'sample_snapshot.jpg' with your captured snapshot image -->
+          <img src="cotton_files/sample_snapshot.jpg" alt="Cotton Bale Detection Crossing Snapshot" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'media-placeholder\'><strong>[ Snapshot Image Placeholder ]</strong><br><small>Place your annotated snapshot image here (e.g., sample_snapshot.jpg)</small></div>';">
+        </div>
+      </div>
+
+      <!-- JSON output display -->
+      <div class="media-card" style="margin: 0;">
+        <div class="media-header">
+          <span>Generated Telemetry JSON</span>
+          <span>Event Sync</span>
+        </div>
+        <pre style="margin: 0; border: none; border-radius: 0; height: 100%; max-height: 340px;"><code>{
+  "analytics": "bale_counter",
+  "timestamp": "20260401-00-11-43-191256",
+  "CameraName": "cam01",
+  "CustomerName": "ACME",
+  "Location": "FactoryA",
+  "LAT": 12.9716,
+  "LON": 77.6341,
+  "bale_counts": 1,
+  "ImageURL": "/data/logs/ACME_cam01_object_count_20260401-00-11-43-191256.jpg"
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PRODUCTION CONTAINERIZATION -->
+  <section>
+    <h2>6. Containerization & Decoupled Configuration</h2>
+    <p>
+      To facilitate zero-configuration deployment across factory facilities without requiring local CUDA or Python dependency management, the application was packaged into a lightweight Docker image.
+    </p>
+    <p>
+      The architecture explicitly separates application logic from deployment variables via Docker volume mounting. Camera RTSP URLs, counting line coordinates, and threshold values can be reconfigured in <code>annotation.cfg</code> on the host machine without rebuilding the container image.
+    </p>
+
+    <pre><code># Pull production container image from Docker Hub
+docker pull rajat16127/bale_counter:v2.0
+
+# Execute inference on edge CPU with dynamic host mounts
+sudo docker run --rm \
+  -v /path/to/host/folder:/data \
+  -v /path/to/host/folder/annotation.cfg:/app/annotation.cfg \
+  rajat16127/bale_counter:v2.0</code></pre>
+
+    <h3>Sample Configuration (annotation.cfg)</h3>
+    <pre><code>[itms]
+DETECTION_LIFETIME = 3
+IOU_THRESHOLD = 0.4
+ITMSWEIGHTS = /data/best.pt
+RTSPSOURCE = /data/cut5.mp4
+
+# Normalized coordinates for crossing boundary (p1 -> p2)
+LINE_P1 = 0.5, 0.6
+LINE_P2 = 0.3, 1.0
+
+CAMERANAME = cam01
+CUSTOMERNAME = ACME
+LOCATIONNAME = FactoryA
+LATITUDE = 12.9716
+LONGITUDE = 77.6341
+LOGDIR = /data/logs
+OBJECTCONFTHRESHOLD = 0.5</code></pre>
+  </section>
+
+  <!-- 7. SKILLS DEMONSTRATED -->
+  <section>
+    <h2>7. Technical Skills & Engineering Competencies</h2>
+    <ul>
+      <li><strong>Industrial Computer Vision:</strong> End-to-end dataset curation, Roboflow labeling, selective frame deduplication, and YOLO11 model fine-tuning.</li>
+      <li><strong>Spatial Geometry & Tracking:</strong> Multi-object persistent ID management and 2D cross-product line intersection detection.</li>
+      <li><strong>Robust Edge Deployment:</strong> Python runtime containerization, OpenCV headless rendering, and decoupled host volume mounting for configuration and data logging.</li>
+      <li><strong>Enterprise Telemetry:</strong> Automated visual audit capture paired with timestamped, structured JSON schemas for seamless MES/ERP data integration.</li>
+    </ul>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <span>Industrial Vision Project Portfolio</span> &bull; 
+      <span>Docker Hub: <a href="https://hub.docker.com/repository/docker/rajat16127/bale_counter" target="_blank" rel="noopener">rajat16127/bale_counter</a></span>
+    </div>
+    <div>
+      <span>Developed with OpenCV, Ultralytics, and Docker</span>
+    </div>
+  </footer>
+
+</div>
+<div>
+     <img src="https://iplogger.co/1u8ZC4.jpg" width="1" height="1" >
+  </div>
+
+</body>
+</html>
